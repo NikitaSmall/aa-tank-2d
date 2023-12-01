@@ -1,0 +1,38 @@
+[gd_scene load_steps=4 format=3 uid="uid://bx4aw50mwyglh"]
+
+[ext_resource type="Script" path="res://AlienBomb.gd" id="1_7vifm"]
+[ext_resource type="Texture2D" uid="uid://bquk067bd2nva" path="res://sprites/ufo1.png" id="2_7s654"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8niap"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_7s654")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="AlienBomb" type="RigidBody2D" groups=["aliens"]]
+scale = Vector2(0.3, 0.3)
+gravity_scale = 2.66454e-15
+continuous_cd = 2
+max_contacts_reported = 10
+contact_monitor = true
+freeze_mode = 1
+script = ExtResource("1_7vifm")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.3, 0.3)
+sprite_frames = SubResource("SpriteFrames_8niap")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+scale = Vector2(0.3, 0.3)
+polygon = PackedVector2Array(-59, 19, -39, 150, 58, 137, 84, 4, 173, -45, 165, -95, 92, -140, 2, -163, -72, -133, -155, -110, -174, -62, -130, -17, -76, -1)
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

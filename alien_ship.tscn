@@ -1,0 +1,41 @@
+[gd_scene load_steps=4 format=3 uid="uid://dlb2dja3kinas"]
+
+[ext_resource type="Script" path="res://alien_ship.gd" id="1_rcmbh"]
+[ext_resource type="Texture2D" uid="uid://dtbkpv2daaru6" path="res://sprites/pngfind.com-alien-spaceship-png-155431.png" id="1_ukchi"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_p8uvm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_ukchi")
+}],
+"loop": true,
+"name": &"ship",
+"speed": 5.0
+}]
+
+[node name="AlienShip" type="RigidBody2D" groups=["aliens"]]
+scale = Vector2(0.25, 0.25)
+collision_layer = 0
+collision_mask = 0
+gravity_scale = 2.66454e-15
+continuous_cd = 2
+max_contacts_reported = 10
+contact_monitor = true
+freeze_mode = 1
+script = ExtResource("1_rcmbh")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.25, 0.25)
+sprite_frames = SubResource("SpriteFrames_p8uvm")
+animation = &"ship"
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+scale = Vector2(0.25, 0.25)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+scale = Vector2(0.25, 0.25)
+polygon = PackedVector2Array(-15, 193, 84, 222, 445, 107, 496, 58, 133, 70, 139, -65, 483, -51, 439, -109, 85, -225, -12, -190, -158, -214, -483, -75, -486, -49, -423, 3, -500, 62, -188, 211)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

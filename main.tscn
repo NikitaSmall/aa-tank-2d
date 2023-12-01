@@ -1,0 +1,78 @@
+[gd_scene load_steps=10 format=3 uid="uid://d3ruavrvc5pgs"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_n0ojb"]
+[ext_resource type="PackedScene" uid="uid://diwh5lq6eq85f" path="res://player.tscn" id="2_2etia"]
+[ext_resource type="PackedScene" uid="uid://bx4aw50mwyglh" path="res://alien_bomb.tscn" id="2_02syk"]
+[ext_resource type="PackedScene" uid="uid://dlb2dja3kinas" path="res://alien_ship.tscn" id="3_63eqr"]
+[ext_resource type="Texture2D" uid="uid://1n6vvxjd3wal" path="res://sprites/background/nature-pokemon-wallpaper-12f1c2d0cd968e0b2a682285105869c2.jpg" id="4_igoni"]
+[ext_resource type="PackedScene" uid="uid://ce2h0f1ddyepg" path="res://hud.tscn" id="6_d0g5b"]
+
+[sub_resource type="Curve2D" id="Curve2D_k2tya"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1202, 2)
+}
+point_count = 2
+
+[sub_resource type="Curve2D" id="Curve2D_g4usw"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -1, 303, 0, 0, 0, 0, -1, 108)
+}
+point_count = 2
+
+[sub_resource type="Curve2D" id="Curve2D_ewtue"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 1201, 261, 0, 0, 0, 0, 1198, 41)
+}
+point_count = 2
+
+[node name="Main" type="Node"]
+script = ExtResource("1_n0ojb")
+alien_bomb_scene = ExtResource("2_02syk")
+alien_ship_scene = ExtResource("3_63eqr")
+
+[node name="StartPosition" type="Marker2D" parent="."]
+position = Vector2(400, 700)
+
+[node name="Player" parent="." instance=ExtResource("2_2etia")]
+visible = false
+
+[node name="AlienBombTimer" type="Timer" parent="."]
+wait_time = 1.5
+
+[node name="AlienBombSpawnPath" type="Path2D" parent="."]
+curve = SubResource("Curve2D_k2tya")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="AlienBombSpawnPath"]
+rotation = 0.00166389
+
+[node name="TextureRect" type="TextureRect" parent="."]
+z_index = -10
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_igoni")
+
+[node name="AlienShipSpawnPath1" type="Path2D" parent="."]
+curve = SubResource("Curve2D_g4usw")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="AlienShipSpawnPath1"]
+position = Vector2(-1, 303)
+rotation = -1.5708
+
+[node name="AlienShipSpawnPath2" type="Path2D" parent="."]
+curve = SubResource("Curve2D_ewtue")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="AlienShipSpawnPath2"]
+position = Vector2(1201, 261)
+rotation = -1.58443
+
+[node name="AlienShipTimer" type="Timer" parent="."]
+
+[node name="HUD" parent="." instance=ExtResource("6_d0g5b")]
+
+[connection signal="hit" from="Player" to="." method="_on_player_hit"]
+[connection signal="timeout" from="AlienBombTimer" to="." method="_on_alien_bomb_timer_timeout"]
+[connection signal="timeout" from="AlienShipTimer" to="." method="_on_alien_ship_timer_timeout"]
+[connection signal="start_game" from="HUD" to="." method="_on_hud_start_game"]
